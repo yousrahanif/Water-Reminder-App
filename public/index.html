@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Water Reminder App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Water Reminder App</h1>
+    
+    <h2>Sign Up & Set Reminders</h2>
+    <form id="signupForm">
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="waterAmount">Daily Water Goal (in liters):</label>
+        <input type="number" id="waterAmount" name="waterAmount" step="0.1" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="reminderCount">Number of Reminders per Day:</label>
+        <input type="number" id="reminderCount" name="reminderCount" required>
+      </div>
+      
+      <button type="submit">Sign Up & Set Reminders</button>
+    </form>
+    <p id="message"></p>
+  </div>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const waterAmount = document.getElementById('waterAmount').value;
+      const reminderCount = document.getElementById('reminderCount').value;
+
+      const response = await fetch('http://localhost:5000/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password, waterAmount, reminderCount })
+      });
+
+      const data = await response.json();
+      document.getElementById('message').textContent = data.message;
+
+      if (data.message === 'User registered and reminders set successfully') {
+        document.getElementById('signupForm').reset(); // Reset the form on successful signup
+      }
+    });
+  </script>
+</body>
+</html>
